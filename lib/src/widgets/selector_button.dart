@@ -17,13 +17,11 @@ class SelectorButton extends StatelessWidget {
   final bool isEnabled;
   final bool isScrollControlled;
   final BoxDecoration selectorDecoration;
-  final bool darkMode;
 
   final ValueChanged<Country> onCountryChanged;
 
   const SelectorButton({
     Key key,
-    @required this.darkMode,
     @required this.countries,
     @required this.country,
     @required this.selectorConfig,
@@ -71,10 +69,10 @@ class SelectorButton extends StatelessWidget {
                     if (selectorConfig.selectorType ==
                         PhoneInputSelectorType.BOTTOM_SHEET) {
                       selected = await showCountrySelectorBottomSheet(
-                          context, countries, darkMode);
+                          context, countries, selectorConfig.backgroundColor);
                     } else {
                       selected =
-                          await showCountrySelectorDialog(context, countries, darkMode);
+                          await showCountrySelectorDialog(context, countries, selectorConfig.backgroundColor);
                     }
 
                     if (selected != null) {
@@ -110,12 +108,12 @@ class SelectorButton extends StatelessWidget {
   }
 
   Future<Country> showCountrySelectorDialog(
-      BuildContext context, List<Country> countries, bool darkMode) {
+      BuildContext context, List<Country> countries, Color backgroundColor) {
     return showDialog(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) => AlertDialog(
-        backgroundColor: Colors.black,
+        backgroundColor: backgroundColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(6.0))),
         contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 0),
@@ -128,7 +126,7 @@ class SelectorButton extends StatelessWidget {
             showFlags: selectorConfig.showFlags,
             useEmoji: selectorConfig.useEmoji,
             autoFocus: autoFocusSearchField,
-              darkMode: darkMode ?? false
+            textColor: selectorConfig.textColor,
           ),
         ),
       ),
@@ -136,7 +134,7 @@ class SelectorButton extends StatelessWidget {
   }
 
   Future<Country> showCountrySelectorBottomSheet(
-      BuildContext context, List<Country> countries, bool darkMode) {
+      BuildContext context, List<Country> countries, Color backgroundColor, ) {
     return showModalBottomSheet(
       context: context,
       clipBehavior: Clip.hardEdge,
@@ -154,7 +152,7 @@ class SelectorButton extends StatelessWidget {
             builder: (BuildContext context, ScrollController controller) {
               return Container(
                 decoration: ShapeDecoration(
-                  color: darkMode ? Colors.black : Colors.white,
+                  color: backgroundColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(12),
@@ -170,6 +168,7 @@ class SelectorButton extends StatelessWidget {
                   showFlags: selectorConfig.showFlags,
                   useEmoji: selectorConfig.useEmoji,
                   autoFocus: autoFocusSearchField,
+                  textColor: selectorConfig.textColor,
                 ),
               );
             },

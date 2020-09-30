@@ -48,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onInputValidated: (bool value) {
                 print(value);
               },
-              selectorConfig : SelectorConfig(selectorType: PhoneInputSelectorType.DIALOG, showFlags: true),
+              selectorConfig : SelectorConfig(selectorType: PhoneInputSelectorType.DIALOG, showFlags: true, backgroundColor: Colors.black, textColor: Colors.white),
               ignoreBlank: false,
               autoValidate: false,
               selectorTextStyle: TextStyle(color: Colors.white),
@@ -131,8 +131,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   hintStyle:  new TextStyle(
                       color: Colors.white30,
                       fontSize: 14)),
-              darkMode: true,
-
             ),
             RaisedButton(
               onPressed: () {

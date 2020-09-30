@@ -11,14 +11,14 @@ class CountrySearchListWidget extends StatefulWidget {
   final bool autoFocus;
   final bool showFlags;
   final bool useEmoji;
-  final bool darkMode;
+  final Color textColor;
 
   CountrySearchListWidget(this.countries, this.locale,
       {this.searchBoxDecoration,
       this.scrollController,
       this.showFlags,
       this.useEmoji,
-        this.darkMode,
+        this.textColor,
       this.autoFocus = false});
 
   @override
@@ -103,7 +103,7 @@ class _CountrySearchListWidgetState extends State<CountrySearchListWidget> {
               return Column(
                 children: [
                   Material(
-                    color: widget.darkMode ? Colors.black : Colors.white,
+                    color: Colors.transparent,
                     child: ListTile(
                       contentPadding: EdgeInsets.only(left: 12, right: 12, bottom: 12, top: 12),
                       key: Key(TestHelper.countryItemKeyValue(country.countryCode)),
@@ -113,7 +113,7 @@ class _CountrySearchListWidgetState extends State<CountrySearchListWidget> {
                       title: Align(
                           alignment: AlignmentDirectional.centerStart,
                           child: Text('${getCountryName(country)}',
-                              textAlign: TextAlign.start, style: TextStyle(color: widget.darkMode ? Colors.white : Colors.black),),),
+                              textAlign: TextAlign.start, style: TextStyle(color: widget.textColor),),),
                       // subtitle: Align(
                       //     alignment: AlignmentDirectional.centerStart,
                       //     child: Text('${country?.dialCode ?? ''}',
@@ -126,7 +126,7 @@ class _CountrySearchListWidgetState extends State<CountrySearchListWidget> {
                       //         textAlign: TextAlign.start, style: TextStyle(color: widget.darkMode ? Colors.grey : Colors.black))),
                       trailing: Text('${country?.dialCode ?? ''}',
                           textDirection: TextDirection.ltr,
-                          textAlign: TextAlign.start, style: TextStyle(color: widget.darkMode ? Colors.white : Colors.black)),
+                          textAlign: TextAlign.start, style: TextStyle(color: widget.textColor)),
                       onTap: () => Navigator.of(context).pop(country),
                     ),
                   ),

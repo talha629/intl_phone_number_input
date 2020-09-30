@@ -74,7 +74,6 @@ class InternationalPhoneNumberInput extends StatefulWidget {
 
   final List<String> countries;
   final BoxDecoration selectorDecoration;
-  final bool darkMode;
 
   InternationalPhoneNumberInput(
       {Key key,
@@ -107,7 +106,8 @@ class InternationalPhoneNumberInput extends StatefulWidget {
       this.inputDecoration,
       this.searchBoxDecoration,
       this.focusNode,
-      this.countries, this.darkMode = false})
+      this.countries,
+      })
       : super(key: key);
 
   @override
@@ -313,7 +313,6 @@ class _InputWidgetView
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               SelectorButton(
-                darkMode: widget.darkMode,
                 country: state.country,
                 countries: state.countries,
                 onCountryChanged: state.onCountryChanged,
