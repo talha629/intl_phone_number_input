@@ -16,11 +16,14 @@ class SelectorButton extends StatelessWidget {
   final String locale;
   final bool isEnabled;
   final bool isScrollControlled;
+  final BoxDecoration selectorDecoration;
+  final bool darkMode;
 
   final ValueChanged<Country> onCountryChanged;
 
   const SelectorButton({
     Key key,
+    @required this.darkMode,
     @required this.countries,
     @required this.country,
     @required this.selectorConfig,
@@ -31,6 +34,7 @@ class SelectorButton extends StatelessWidget {
     @required this.onCountryChanged,
     @required this.isEnabled,
     @required this.isScrollControlled,
+    @required this.selectorDecoration,
   }) : super(key: key);
 
   @override
@@ -67,10 +71,10 @@ class SelectorButton extends StatelessWidget {
                     if (selectorConfig.selectorType ==
                         PhoneInputSelectorType.BOTTOM_SHEET) {
                       selected = await showCountrySelectorBottomSheet(
-                          context, countries);
+                          context, countries, darkMode);
                     } else {
                       selected =
-                          await showCountrySelectorDialog(context, countries);
+                          await showCountrySelectorDialog(context, countries, darkMode);
                     }
 
                     if (selected != null) {
@@ -78,14 +82,12 @@ class SelectorButton extends StatelessWidget {
                     }
                   }
                 : null,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: Item(
-                country: country,
-                showFlag: selectorConfig.showFlags,
-                useEmoji: selectorConfig.useEmoji,
-                textStyle: selectorTextStyle,
-              ),
+            child: Item(
+              country: country,
+              showFlag: selectorConfig.showFlags,
+              useEmoji: selectorConfig.useEmoji,
+              textStyle: selectorTextStyle,
+              decoration: selectorDecoration
             ),
           );
   }
@@ -108,11 +110,15 @@ class SelectorButton extends StatelessWidget {
   }
 
   Future<Country> showCountrySelectorDialog(
-      BuildContext context, List<Country> countries) {
+      BuildContext context, List<Country> countries, bool darkMode) {
     return showDialog(
       context: context,
       barrierDismissible: true,
       builder: (BuildContext context) => AlertDialog(
+        backgroundColor: Colors.black,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(6.0))),
+        contentPadding: EdgeInsets.symmetric(vertical: 12, horizontal: 0),
         content: Container(
           width: double.maxFinite,
           child: CountrySearchListWidget(
@@ -122,6 +128,7 @@ class SelectorButton extends StatelessWidget {
             showFlags: selectorConfig.showFlags,
             useEmoji: selectorConfig.useEmoji,
             autoFocus: autoFocusSearchField,
+              darkMode: darkMode ?? false
           ),
         ),
       ),
@@ -129,7 +136,7 @@ class SelectorButton extends StatelessWidget {
   }
 
   Future<Country> showCountrySelectorBottomSheet(
-      BuildContext context, List<Country> countries) {
+      BuildContext context, List<Country> countries, bool darkMode) {
     return showModalBottomSheet(
       context: context,
       clipBehavior: Clip.hardEdge,
@@ -147,7 +154,7 @@ class SelectorButton extends StatelessWidget {
             builder: (BuildContext context, ScrollController controller) {
               return Container(
                 decoration: ShapeDecoration(
-                  color: Colors.white,
+                  color: darkMode ? Colors.black : Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(12),

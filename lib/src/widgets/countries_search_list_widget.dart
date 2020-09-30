@@ -11,12 +11,14 @@ class CountrySearchListWidget extends StatefulWidget {
   final bool autoFocus;
   final bool showFlags;
   final bool useEmoji;
+  final bool darkMode;
 
   CountrySearchListWidget(this.countries, this.locale,
       {this.searchBoxDecoration,
       this.scrollController,
       this.showFlags,
       this.useEmoji,
+        this.darkMode,
       this.autoFocus = false});
 
   @override
@@ -80,7 +82,7 @@ class _CountrySearchListWidgetState extends State<CountrySearchListWidget> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
           child: TextFormField(
             key: Key(TestHelper.CountrySearchInputKeyValue),
             decoration: getSearchBoxDecoration(),
@@ -98,21 +100,41 @@ class _CountrySearchListWidgetState extends State<CountrySearchListWidget> {
             itemBuilder: (BuildContext context, int index) {
               Country country = filteredCountries[index];
               if (country == null) return null;
-              return ListTile(
-                key: Key(TestHelper.countryItemKeyValue(country.countryCode)),
-                leading: widget.showFlags
-                    ? _Flag(country: country, useEmoji: widget.useEmoji)
-                    : null,
-                title: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: Text('${getCountryName(country)}',
-                        textAlign: TextAlign.start)),
-                subtitle: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: Text('${country?.dialCode ?? ''}',
-                        textDirection: TextDirection.ltr,
-                        textAlign: TextAlign.start)),
-                onTap: () => Navigator.of(context).pop(country),
+              return Column(
+                children: [
+                  Material(
+                    color: widget.darkMode ? Colors.black : Colors.white,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.only(left: 12, right: 12, bottom: 12, top: 12),
+                      key: Key(TestHelper.countryItemKeyValue(country.countryCode)),
+                      leading: widget.showFlags
+                          ? _Flag(country: country, useEmoji: widget.useEmoji)
+                          : null,
+                      title: Align(
+                          alignment: AlignmentDirectional.centerStart,
+                          child: Text('${getCountryName(country)}',
+                              textAlign: TextAlign.start, style: TextStyle(color: widget.darkMode ? Colors.white : Colors.black),),),
+                      // subtitle: Align(
+                      //     alignment: AlignmentDirectional.centerStart,
+                      //     child: Text('${country?.dialCode ?? ''}',
+                      //         textDirection: TextDirection.ltr,
+                      //         textAlign: TextAlign.start, style: TextStyle(color: widget.darkMode ? Colors.grey : Colors.black))),
+                      // trailing: Align(
+                      //     alignment: AlignmentDirectional.centerStart,
+                      //     child: Text('${country?.dialCode ?? ''}',
+                      //         textDirection: TextDirection.ltr,
+                      //         textAlign: TextAlign.start, style: TextStyle(color: widget.darkMode ? Colors.grey : Colors.black))),
+                      trailing: Text('${country?.dialCode ?? ''}',
+                          textDirection: TextDirection.ltr,
+                          textAlign: TextAlign.start, style: TextStyle(color: widget.darkMode ? Colors.white : Colors.black)),
+                      onTap: () => Navigator.of(context).pop(country),
+                    ),
+                  ),
+                  index < filteredCountries.length - 1 ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Divider(color: Colors.white70, height: 1,),
+                  ) : Divider(height: 1,),
+                ],
               );
             },
           ),
@@ -138,12 +160,14 @@ class _Flag extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline5,
                   )
                 : country?.flagUri != null
-                    ? CircleAvatar(
+                    ?
+                      CircleAvatar(
                         backgroundImage: AssetImage(
                           country.flagUri,
                           package: 'intl_phone_number_input',
                         ),
                       )
+            //Image.asset(country.flagUri, package: 'intl_phone_number_input', width: 32,)
                     : SizedBox.shrink(),
           )
         : SizedBox.shrink();
