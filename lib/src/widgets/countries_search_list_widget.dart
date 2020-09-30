@@ -105,15 +105,21 @@ class _CountrySearchListWidgetState extends State<CountrySearchListWidget> {
                   Material(
                     color: Colors.transparent,
                     child: ListTile(
-                      contentPadding: EdgeInsets.only(left: 12, right: 12, bottom: 12, top: 12),
+                      dense: true,
+                      contentPadding: EdgeInsets.only(left: 12, right: 12, bottom: 8, top: 8),
                       key: Key(TestHelper.countryItemKeyValue(country.countryCode)),
-                      leading: widget.showFlags
-                          ? _Flag(country: country, useEmoji: widget.useEmoji)
-                          : null,
-                      title: Align(
-                          alignment: AlignmentDirectional.centerStart,
-                          child: Text('${getCountryName(country)}',
-                              textAlign: TextAlign.start, style: TextStyle(color: widget.textColor),),),
+                      title: Row(
+                        children: [
+                          widget.showFlags
+                              ? _Flag(country: country, useEmoji: widget.useEmoji)
+                              : null,
+                          SizedBox(width: 14,),
+                          Text('${getCountryName(country)}',
+                            textAlign: TextAlign.start, style: TextStyle(color: widget.textColor),)
+                        ],
+                      ),
+                      // title: Text('${getCountryName(country)}',
+                      //     textAlign: TextAlign.start, style: TextStyle(color: widget.textColor),),
                       // subtitle: Align(
                       //     alignment: AlignmentDirectional.centerStart,
                       //     child: Text('${country?.dialCode ?? ''}',
@@ -130,10 +136,7 @@ class _CountrySearchListWidgetState extends State<CountrySearchListWidget> {
                       onTap: () => Navigator.of(context).pop(country),
                     ),
                   ),
-                  index < filteredCountries.length - 1 ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: Divider(color: Colors.white70, height: 1,),
-                  ) : Divider(height: 1,),
+                  index < filteredCountries.length - 1 ? Divider(color: Colors.white70, height: 1,) : Divider(height: 1,),
                 ],
               );
             },
@@ -154,6 +157,7 @@ class _Flag extends StatelessWidget {
   Widget build(BuildContext context) {
     return country != null
         ? Container(
+      height: 20, width: 20,
             child: useEmoji
                 ? Text(
                     Utils.generateFlagEmojiUnicode(country?.countryCode ?? ''),
